@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Streamlit
+.streamlit/
+
+# App specific
+faiss_index/
+temp_*.pdf
+temp_*.txt
+temp_*.docx
+
+# OS
+.DS_Store
