@@ -78,4 +78,4 @@ streamlit run app.py
 - `faiss_index/`: Local directory where the vector index is persisted.
 
 ---
-*Created by [Mohammed Thahers](https://github.com/mohammedthahers](https://github.com/MohammedThaher01)*
+*Created by [Mohammed Thahers]([https://github.com/mohammedthahers](https://github.com/MohammedThaher01))*
