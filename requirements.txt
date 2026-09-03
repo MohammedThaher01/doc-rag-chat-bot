@@ -5,7 +5,7 @@ langchain-community>=0.3.0,<0.4.0
 langchain-groq
 langchain-huggingface<0.2.0
 langchain-text-splitters
-pydantic<3.0.0,>=2.0.0
+pydantic>=2.0.0,<3.0.0
 faiss-cpu
 pypdf
 docx2txt
@@ -13,3 +13,9 @@ python-dotenv
 pytesseract
 pdf2image
 Pillow
+torch==2.1.0
+torchvision==0.16.0
+sentence-transformers
+langgraph
+duckduckgo-search
+ddgs
