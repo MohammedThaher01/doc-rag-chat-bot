@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import FastEmbedEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import ConversationalRetrievalChain
@@ -82,14 +82,14 @@ def build_vectorstore(file_paths: list[str]):
             "Try uploading a text-based PDF or a .txt file instead."
         )
 
-    embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+    embeddings = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
     vectorstore = FAISS.from_documents(chunks, embeddings)
     vectorstore.save_local(FAISS_PATH)
     return vectorstore, len(chunks)
 
 
 def load_vectorstore():
-    embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+    embeddings = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
     return FAISS.load_local(FAISS_PATH, embeddings,
                             allow_dangerous_deserialization=True)
 
