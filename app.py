@@ -63,19 +63,7 @@ if prompt := st.chat_input("Ask anything about your documents..."):
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                result = st.session_state.qa_chain({"question": prompt})
-                answer = result["answer"]
-                sources = result.get("source_documents", [])
+                answer = st.session_state.qa_chain.invoke(prompt)
             st.markdown(answer)
-            if sources:
-                with st.expander("📚 Sources used"):
-                    seen = set()
-                    for doc in sources:
-                        src = doc.metadata.get("source", "Unknown")
-                        page = doc.metadata.get("page", "")
-                        label = f"{os.path.basename(src)}" + (f" — page {page+1}" if page != "" else "")
-                        if label not in seen:
-                            st.caption(f"• {label}")
-                            seen.add(label)
 
         st.session_state.messages.append({"role": "assistant", "content": answer})
