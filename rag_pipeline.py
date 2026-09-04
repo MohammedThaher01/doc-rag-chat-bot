@@ -7,7 +7,6 @@ from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferWindowMemory
-from langchain_core.prompts import PromptTemplate
 from langchain.schema import Document
 from PIL import Image
 import pytesseract
@@ -17,22 +16,6 @@ load_dotenv()
 
 FAISS_PATH = "faiss_index"
 EMBED_MODEL = "all-MiniLM-L6-v2"
-
-CUSTOM_PROMPT = PromptTemplate(
-    input_variables=["context", "question", "chat_history"],
-    template="""You are a friendly and helpful document assistant named DocChat. Your job is to answer questions based on the uploaded document context below.
-If the question is unrelated to the documents, respond warmly and gently redirect the user. Don't be blunt — be conversational and encouraging.
-
-Chat History:
-{chat_history}
-
-Context from documents:
-{context}
-
-Question: {question}
-
-Answer:"""
-)
 
 
 def load_scanned_pdf(path: str) -> list:
@@ -114,7 +97,6 @@ def get_qa_chain(vectorstore, chat_history=None):
         retriever=vectorstore.as_retriever(search_kwargs={"k": 2}),
         memory=memory,
         return_source_documents=True,
-        combine_docs_chain_kwargs={"prompt": CUSTOM_PROMPT},
         verbose=False
     )
     return chain
