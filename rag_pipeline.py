@@ -5,9 +5,10 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferWindowMemory
 from langchain.schema import Document
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 from PIL import Image
 import pytesseract
 from pdf2image import convert_from_path
@@ -84,18 +85,25 @@ def get_qa_chain(vectorstore):
         groq_api_key=api_key
     )
 
-    memory = ConversationBufferWindowMemory(
-        k=2,
-        memory_key="chat_history",
-        return_messages=True,
-        output_key="answer"
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
+
+    prompt = ChatPromptTemplate.from_template("""You are a helpful document assistant. Answer based only on the context below. If the question is unrelated to the documents, say so warmly.
+
+Context:
+{context}
+
+Question: {question}
+
+Answer:""")
+
+    def format_docs(docs):
+        return "\n\n".join(d.page_content for d in docs)
+
+    chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
     )
 
-    chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vectorstore.as_retriever(search_kwargs={"k": 2}),
-        memory=memory,
-        return_source_documents=True,
-        verbose=False
-    )
     return chain
