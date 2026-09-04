@@ -12,7 +12,7 @@ python-dotenv
 pytesseract
 pdf2image
 Pillow
-fastembed
+sentence-transformers
 langgraph
 duckduckgo-search
 ddgs
