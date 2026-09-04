@@ -100,7 +100,7 @@ def get_qa_chain(vectorstore, chat_history=None):
         raise ValueError("GROQ_API_KEY is not set in environment or .env file.")
 
     llm = ChatGroq(
-        model_name="llama-3.3-70b-versatile",
+        model_name="llama3-8b-8192",
         temperature=0.3,
         groq_api_key=api_key
     )
