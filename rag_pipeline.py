@@ -73,7 +73,7 @@ def load_vectorstore():
                             allow_dangerous_deserialization=True)
 
 
-def get_qa_chain(vectorstore, chat_history=None):
+def get_qa_chain(vectorstore):
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY is not set in environment or .env file.")
@@ -87,7 +87,6 @@ def get_qa_chain(vectorstore, chat_history=None):
     memory = ConversationBufferWindowMemory(
         k=2,
         memory_key="chat_history",
-        chat_memory=chat_history,
         return_messages=True,
         output_key="answer"
     )
