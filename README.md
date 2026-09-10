@@ -47,13 +47,13 @@ User Question
 
 ## ✨ Features
 
-- 📄 Upload and chat with **PDF, TXT, DOCX** files
-- 🤖 **LangGraph autonomous agent** — RAG-first, web search fallback
-- 🔍 **FAISS vector store** with recursive chunking and persistent indexing
-- 🖼️ **OCR fallback** for scanned/image-based PDFs using Tesseract
-- 🌐 **Web search** when document context is insufficient
-- 💬 Conversational UI with source attribution (Document vs Web)
-- ⚡ **Groq LPU inference** — sub-second response times
+- Upload and chat with PDF, TXT, DOCX files
+- LangGraph autonomous agent — RAG-first, web search fallback
+- FAISS vector store with recursive chunking and persistent indexing
+- OCR fallback for scanned/image-based PDFs using Tesseract
+- Web search when document context is insufficient
+- Conversational UI with source attribution (Document vs Web)
+- Groq LPU inference — sub-second response times
 
 ---
 
@@ -157,11 +157,10 @@ Lightweight (~80MB), runs locally, strong semantic similarity performance. No AP
 
 ## 🙋 Author
 
+## 🙋 Author
+
 **Mohammed Thaher S**
-Final-year CSE student at Sathyabama Institute of Science and Technology, Chennai
-Building AI portfolio for ML/LLM Engineer roles
+CSE graduate from Sathyabama Institute of Science and Technology, Chennai
+Building AI portfolio for LLM Engineer roles
 
-[LinkedIn]([https://linkedin.com/in/yourprofile]) • [GitHub](https://github.com/MohammedThaher01)
-```
-
-Replace `yourusername` and the LinkedIn URL with your actual handles. Add this as `README.md` in your GitHub repo root.
+[LinkedIn](https://www.linkedin.com/in/mohammed-thaher-s/) • [GitHub](https://github.com/MohammedThaher01)
