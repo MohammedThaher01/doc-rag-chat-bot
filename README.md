@@ -157,8 +157,6 @@ Lightweight (~80MB), runs locally, strong semantic similarity performance. No AP
 
 ## 🙋 Author
 
-## 🙋 Author
-
 **Mohammed Thaher S**
 CSE graduate from Sathyabama Institute of Science and Technology, Chennai
 Building AI portfolio for LLM Engineer roles
