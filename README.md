@@ -1,4 +1,4 @@
-```markdown
+
 # 📄 DocChat — Document RAG Chatbot with LangGraph Agent
 
 An end-to-end AI-powered document assistant that lets you upload PDFs, TXTs, or DOCXs and chat with them using a LangGraph autonomous agent backed by Groq's ultra-fast LPU inference.
@@ -11,7 +11,6 @@ An end-to-end AI-powered document assistant that lets you upload PDFs, TXTs, or 
 
 This app uses a **RAG-first autonomous agent** built with LangGraph:
 
-```
 User Question
       ↓
 [Retrieve Node] → FAISS similarity search on uploaded docs
