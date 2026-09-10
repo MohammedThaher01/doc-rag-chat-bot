@@ -2,39 +2,21 @@ import os
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_groq import ChatGroq
-from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
-from langchain.prompts import PromptTemplate
 from langchain.schema import Document
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 from PIL import Image
 import pytesseract
 from pdf2image import convert_from_path
 
 load_dotenv()
-print(f"DEBUG: GROQ_API_KEY present: {bool(os.getenv('GROQ_API_KEY'))}")
 
 FAISS_PATH = "faiss_index"
 EMBED_MODEL = "all-MiniLM-L6-v2"
-
-CUSTOM_PROMPT = PromptTemplate(
-    input_variables=["context", "question", "chat_history"],
-    template="""You are a friendly and helpful document assistant named DocChat. Your job is to answer questions based on the uploaded document context below.
-
-If the question is unrelated to the documents, respond warmly and gently redirect the user. Don't be blunt — be conversational and encouraging.
-
-Chat History:
-{chat_history}
-
-Context from documents:
-{context}
-
-Question: {question}
-
-Answer:"""
-)
 
 
 def load_scanned_pdf(path: str) -> list:
@@ -69,19 +51,17 @@ def load_documents(file_paths: list[str]):
 def build_vectorstore(file_paths: list[str]):
     docs = load_documents(file_paths)
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=200,
+        chunk_size=500,
+        chunk_overlap=50,
         separators=["\n\n", "\n", ".", " "]
     )
     chunks = splitter.split_documents(docs)
-
     if not chunks:
         raise ValueError(
             "No text could be extracted from the uploaded files. "
             "They may be scanned images or image-based PDFs. "
             "Try uploading a text-based PDF or a .txt file instead."
         )
-
     embeddings = HuggingFaceEmbeddings(model_name=EMBED_MODEL)
     vectorstore = FAISS.from_documents(chunks, embeddings)
     vectorstore.save_local(FAISS_PATH)
@@ -94,30 +74,36 @@ def load_vectorstore():
                             allow_dangerous_deserialization=True)
 
 
-def get_qa_chain(vectorstore, chat_history=None):
+def get_qa_chain(vectorstore):
     api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
         raise ValueError("GROQ_API_KEY is not set in environment or .env file.")
 
     llm = ChatGroq(
-        model_name="llama-3.3-70b-versatile",
+        model_name="openai/gpt-oss-20b",
         temperature=0.3,
         groq_api_key=api_key
     )
 
-    memory = ConversationBufferMemory(
-        memory_key="chat_history",
-        chat_memory=chat_history,
-        return_messages=True,
-        output_key="answer"
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
+
+    prompt = ChatPromptTemplate.from_template("""You are a helpful document assistant. Answer based only on the context below. If the question is unrelated to the documents, say so warmly.
+
+Context:
+{context}
+
+Question: {question}
+
+Answer:""")
+
+    def format_docs(docs):
+        return "\n\n".join(d.page_content for d in docs)
+
+    chain = (
+        {"context": retriever | format_docs, "question": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
     )
 
-    chain = ConversationalRetrievalChain.from_llm(
-        llm=llm,
-        retriever=vectorstore.as_retriever(search_kwargs={"k": 4}),
-        memory=memory,
-        return_source_documents=True,
-        combine_docs_chain_kwargs={"prompt": CUSTOM_PROMPT},
-        verbose=False
-    )
     return chain

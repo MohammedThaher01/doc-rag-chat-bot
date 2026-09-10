@@ -3,9 +3,8 @@ langchain-core>=0.3.0,<0.4.0
 langchain>=0.3.0,<0.4.0
 langchain-community>=0.3.0,<0.4.0
 langchain-groq
-langchain-huggingface<0.2.0
 langchain-text-splitters
-pydantic<3.0.0,>=2.0.0
+pydantic>=2.0.0,<3.0.0
 faiss-cpu
 pypdf
 docx2txt
@@ -13,5 +12,12 @@ python-dotenv
 pytesseract
 pdf2image
 Pillow
+<<<<<<< HEAD
 langgraph 
 duckduckgo-search
+=======
+sentence-transformers
+langgraph
+duckduckgo-search
+ddgs
+>>>>>>> 77142bd64135603d37e778254753d3e1e087685c
