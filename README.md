@@ -22,7 +22,7 @@ User Question
               [Generate Answer]
                       ↓
               Streamed response + Source label
-```
+
 
 1. Every question first hits the **FAISS vector store** built from your uploaded documents
 2. If the retrieved context is insufficient, the agent **falls back to web search** automatically
