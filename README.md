@@ -11,6 +11,8 @@ An end-to-end AI-powered document assistant that lets you upload PDFs, TXTs, or 
 
 This app uses a **RAG-first autonomous agent** built with LangGraph:
 
+
+```
 User Question
       ↓
 [Retrieve Node] → FAISS similarity search on uploaded docs
@@ -22,6 +24,7 @@ User Question
               [Generate Answer]
                       ↓
               Streamed response + Source label
+```
 
 
 1. Every question first hits the **FAISS vector store** built from your uploaded documents
