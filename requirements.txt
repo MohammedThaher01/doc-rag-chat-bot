@@ -13,3 +13,5 @@ python-dotenv
 pytesseract
 pdf2image
 Pillow
+langgraph 
+duckduckgo-search
