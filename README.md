@@ -64,7 +64,7 @@ User Question
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/yourusername/doc-rag-chatbot.git
+git clone https://github.com/MohammedThaher01/doc-rag-chatbot.git
 cd doc-rag-chatbot
 ```
 
