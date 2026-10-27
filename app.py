@@ -362,16 +362,28 @@ st.markdown(
         height: 1px;
     }
     [data-testid="stChatMessage"] {
-        background: #f0f3f7;
-        border: 1px solid #e1e7ee;
-        border-radius: 14px;
-        box-shadow: 0 3px 12px rgba(27, 49, 38, .025);
-        margin-bottom: 12px;
-        padding: 15px 18px;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0;
+        box-shadow: none !important;
+        margin-bottom: 18px;
+        padding: 0 !important;
     }
     [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
-        background: #edf4ef;
-        border-color: #e2ece4;
+        display: flex;
+        justify-content: flex-end;
+    }
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"])
+    > div:has([data-testid="stMarkdownContainer"]) {
+        background: #e7f1e9;
+        border: 1px solid #d5e5d8;
+        border-radius: 16px 16px 4px 16px;
+        box-sizing: border-box;
+        flex: 0 1 auto;
+        margin-left: auto;
+        max-width: min(80%, 760px);
+        padding: 11px 15px;
+        width: fit-content;
     }
     [data-testid="stChatMessage"] [data-testid="stChatMessageAvatar"],
     [data-testid="stChatMessage"] [data-testid^="chatAvatarIcon-"],
