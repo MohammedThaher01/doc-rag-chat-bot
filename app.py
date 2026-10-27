@@ -364,10 +364,12 @@ st.markdown(
     [data-testid="stChatMessage"] {
         background: transparent !important;
         border: 0 !important;
+        box-sizing: border-box;
         border-radius: 0;
         box-shadow: none !important;
         margin-bottom: 18px;
         padding: 0 !important;
+        width: 100% !important;
     }
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
         display: flex;
