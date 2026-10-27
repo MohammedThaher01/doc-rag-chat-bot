@@ -28,16 +28,18 @@ st.markdown(
         --line: #e7ece8;
         --paper: #f7f8f6;
         --green: #23745a;
-        --green-dark: #18543f;
-        --green-soft: #eaf3ee;
     }
 
     html, body, [class*="css"] {
         font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         color: var(--ink);
     }
-    .stApp { background: var(--paper); }
-    [data-testid="stHeader"] { background: transparent; }
+    .stApp {
+        background: var(--paper);
+    }
+    [data-testid="stHeader"] {
+        background: transparent;
+    }
     [data-testid="stAppViewContainer"], [data-testid="stMain"] {
         background: var(--paper) !important;
     }
@@ -52,8 +54,12 @@ st.markdown(
         background: #172c25;
         border-right: 1px solid rgba(255,255,255,.07);
     }
-    [data-testid="stSidebar"] > div:first-child { padding: 1.65rem 1.25rem 1.4rem; }
-    [data-testid="stSidebar"] * { color: #eef4f0; }
+    [data-testid="stSidebar"] > div:first-child {
+        padding: 1.65rem 1.25rem 1.4rem;
+    }
+    [data-testid="stSidebar"] * {
+        color: #eef4f0;
+    }
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p {
         color: #b7c8bf;
     }
@@ -65,6 +71,28 @@ st.markdown(
     }
     [data-testid="stSidebar"] [data-testid="stFileUploader"] section:hover {
         border-color: #9dc8ae;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileChip"] {
+        background: #29483b;
+        border: 1px solid rgba(202, 226, 211, 0.2);
+        border-radius: 9px;
+        padding: 0.45rem 0.55rem;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] [data-testid="stFileChipName"] {
+        color: #f0f5f1 !important;
+        font-size: 0.75rem;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileUploader"] [data-testid="stFileChip"] small button {
+        background: transparent !important;
+        border-radius: 6px;
+        color: #c1d1c8 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileChip"] small button * {
+        color: #c1d1c8 !important;
+    }
+    [data-testid="stSidebar"] [data-testid="stFileChip"] small button:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
     }
     [data-testid="stSidebar"] [data-testid="stFileUploader"] button {
         background: #eef4f0;
@@ -100,8 +128,12 @@ st.markdown(
         background: #bce2c8;
         color: #173c2c;
     }
-    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,.13); }
-    [data-testid="stSidebar"] [data-testid="stAlert"] * { color: inherit; }
+    [data-testid="stSidebar"] hr {
+        border-color: rgba(255, 255, 255, 0.13);
+    }
+    [data-testid="stSidebar"] [data-testid="stAlert"] * {
+        color: inherit;
+    }
 
     .brand {
         display: flex;
@@ -159,10 +191,13 @@ st.markdown(
         font-size: 11px;
         gap: 8px;
         margin: 6px 0;
-        overflow: hidden;
         padding: 8px 9px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+    .file-row .file-dot {
+        align-self: flex-start;
+        margin-top: 4px;
     }
     .file-dot {
         background: #a7d6b7;
@@ -178,7 +213,10 @@ st.markdown(
         margin-top: 1.6rem;
         padding-top: 1rem;
     }
-    .privacy-note strong { color: #dce8df; font-weight: 600; }
+    .privacy-note strong {
+        color: #dce8df;
+        font-weight: 600;
+    }
 
     .topline {
         align-items: center;
@@ -247,7 +285,9 @@ st.markdown(
         height: 7px;
         width: 7px;
     }
-    .status-pill.ready .status-dot { background: #3a9364; }
+    .status-pill.ready .status-dot {
+        background: #3a9364;
+    }
     .welcome-card {
         background: #fff;
         border: 1px solid var(--line);
@@ -335,12 +375,94 @@ st.markdown(
     }
     [data-testid="stChatMessage"] [data-testid="stChatMessageAvatar"],
     [data-testid="stChatMessage"] [data-testid^="chatAvatarIcon-"],
+    [data-testid="stChatMessage"] [data-testid="stIconMaterial"],
     [data-testid="stChatMessage"] .stChatMessageAvatar {
         display: none !important;
     }
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p {
         font-size: 14px;
         line-height: 1.7;
+        margin: 0 0 0.8rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p:last-child {
+        margin-bottom: 0;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h1,
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h2,
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h3 {
+        color: #24352c;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 700;
+        line-height: 1.35;
+        margin: 1.1rem 0 0.55rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h1 {
+        font-size: 1.35rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h2 {
+        font-size: 1.2rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h3 {
+        font-size: 1.05rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] ul,
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] ol {
+        margin: 0.35rem 0 0.85rem;
+        padding-left: 1.4rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] li {
+        line-height: 1.65;
+        padding-left: 0.15rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] li + li {
+        margin-top: 0.25rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] blockquote {
+        background: rgba(255, 255, 255, 0.5);
+        border-left: 3px solid #8caf98;
+        border-radius: 0 7px 7px 0;
+        color: #52635a;
+        margin: 0.8rem 0;
+        padding: 0.55rem 0.9rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] pre {
+        background: #202a26;
+        border: 1px solid rgba(25, 45, 35, 0.12);
+        border-radius: 9px;
+        margin: 0.75rem 0;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] pre code {
+        color: #e4eee8;
+        font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+        font-size: 0.88em;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] :not(pre) > code {
+        background: rgba(35, 116, 90, 0.09);
+        border-radius: 4px;
+        color: #245c43;
+        padding: 0.12rem 0.3rem;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] table {
+        border-collapse: collapse;
+        display: block;
+        margin: 0.75rem 0;
+        max-width: 100%;
+        overflow-x: auto;
+        width: max-content;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] th,
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] td {
+        border: 1px solid #dce4de;
+        padding: 0.5rem 0.7rem;
+        text-align: left;
+        vertical-align: top;
+    }
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] th {
+        background: rgba(255, 255, 255, 0.65);
+        color: #34463b;
+        font-weight: 700;
     }
     .source-label {
         color: #78867e;
@@ -353,19 +475,24 @@ st.markdown(
         border-radius: 12px;
         box-shadow: none !important;
     }
-    [data-testid="stChatInput"] textarea {
-        background: #fff !important;
-        border: 1px solid #dfe7e1 !important;
+    [data-testid="stChatInputTextArea"] {
+        background: #edf4ef !important;
+        border: 1px solid #cfddd2 !important;
         border-radius: 12px;
         color: var(--ink) !important;
         font-size: 14px !important;
+        line-height: 1.55;
         min-height: 56px;
+        padding: 0.8rem 1rem;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
     }
-    [data-testid="stChatInput"] textarea:focus {
-        border-color: #7bac8c;
-        box-shadow: 0 0 0 2px rgba(72, 133, 95, .12);
+    [data-testid="stChatInputTextArea"]:focus {
+        border-color: #6a9c7a !important;
+        box-shadow: 0 0 0 3px rgba(72, 133, 95, 0.14);
     }
-    [data-testid="stChatInput"] textarea::placeholder { color: #98a49c; }
+    [data-testid="stChatInputTextArea"]::placeholder {
+        color: #7d8b82;
+    }
     [data-testid="stBottom"] {
         background: var(--paper) !important;
     }
@@ -380,11 +507,21 @@ st.markdown(
         border-radius: 10px;
     }
     @media (max-width: 760px) {
-        [data-testid="stMainBlockContainer"] { padding: 1.6rem 1.15rem 2rem; }
-        .hero-title { letter-spacing: -1px; }
-        .suggestion-grid { grid-template-columns: 1fr; }
-        .suggestion { min-height: auto; }
-        .welcome-card { padding: 21px 18px; }
+        [data-testid="stMainBlockContainer"] {
+            padding: 1.6rem 1.15rem 2rem;
+        }
+        .hero-title {
+            letter-spacing: -1px;
+        }
+        .suggestion-grid {
+            grid-template-columns: 1fr;
+        }
+        .suggestion {
+            min-height: auto;
+        }
+        .welcome-card {
+            padding: 21px 18px;
+        }
     }
     </style>
     """,
@@ -406,7 +543,9 @@ with st.sidebar:
         </div>
         <div class="side-label">Workspace</div>
         <div class="side-heading">Add your documents</div>
-        <div class="side-copy">Bring your files together and get clear answers, grounded in their contents.</div>
+        <div class="side-copy">
+            Bring your files together and get clear answers, grounded in their contents.
+        </div>
         """,
         unsafe_allow_html=True,
     )
@@ -426,7 +565,9 @@ with st.sidebar:
             for file in uploaded_files
         )
         st.markdown(file_rows, unsafe_allow_html=True)
-        st.caption(f"{len(uploaded_files)} file{'s' if len(uploaded_files) != 1 else ''} selected")
+        file_count = len(uploaded_files)
+        file_label = "file" if file_count == 1 else "files"
+        st.caption(f"{file_count} {file_label} selected")
 
     if st.button("Process documents", type="primary", use_container_width=True):
         if not uploaded_files:
@@ -438,7 +579,10 @@ with st.sidebar:
                         temp_paths = []
                         for file in uploaded_files:
                             suffix = os.path.splitext(file.name)[1]
-                            path = os.path.join(temp_dir, f"document_{len(temp_paths)}{suffix}")
+                            path = os.path.join(
+                                temp_dir,
+                                f"document_{len(temp_paths)}{suffix}",
+                            )
                             with open(path, "wb") as temp_file:
                                 temp_file.write(file.getvalue())
                             temp_paths.append(path)
@@ -471,7 +615,10 @@ with st.sidebar:
 
     if "vectorstore" in st.session_state:
         st.markdown("---")
-        st.markdown('<div class="side-label">In this workspace</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="side-label">In this workspace</div>',
+            unsafe_allow_html=True,
+        )
         indexed_files = st.session_state.get("indexed_files", [])
         if indexed_files:
             for filename in indexed_files:
@@ -502,7 +649,9 @@ with st.sidebar:
 is_ready = "vectorstore" in st.session_state
 indexed_files = st.session_state.get("indexed_files", [])
 if is_ready and indexed_files:
-    workspace_text = f"{len(indexed_files)} document{'s' if len(indexed_files) != 1 else ''} in this workspace"
+    document_count = len(indexed_files)
+    document_label = "document" if document_count == 1 else "documents"
+    workspace_text = f"{document_count} {document_label} in this workspace"
 elif is_ready:
     workspace_text = "Saved document workspace"
 else:
@@ -535,10 +684,16 @@ st.markdown(
 if not st.session_state.messages:
     if is_ready:
         welcome_title = "Your documents are ready."
-        welcome_copy = "Start with a question. DocChat will look through your documents and help you find a useful answer."
+        welcome_copy = (
+            "Start with a question. DocChat will look through your documents "
+            "and help you find a useful answer."
+        )
     else:
         welcome_title = "A good question is a great place to start."
-        welcome_copy = "Add a document from the left to get started. Then ask for a summary, a specific detail, or a connection between ideas."
+        welcome_copy = (
+            "Add a document from the left to get started. Then ask for a summary, "
+            "a specific detail, or a connection between ideas."
+        )
 
     st.markdown(
         f"""
@@ -573,7 +728,9 @@ else:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if message.get("source"):
-                source_label = "Web search" if message["source"] == "web" else "Your documents"
+                source_label = (
+                    "Web search" if message["source"] == "web" else "Your documents"
+                )
                 st.markdown(
                     f'<div class="source-label">Source · {source_label}</div>',
                     unsafe_allow_html=True,
@@ -581,7 +738,10 @@ else:
 
 if prompt := st.chat_input("Ask a question about your documents..."):
     if not is_ready:
-        st.warning("Add and process your documents in the workspace panel before asking a question.")
+        st.warning(
+            "Add and process your documents in the workspace panel "
+            "before asking a question."
+        )
     else:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
