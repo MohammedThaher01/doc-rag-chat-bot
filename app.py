@@ -369,12 +369,12 @@ st.markdown(
         margin-bottom: 18px;
         padding: 0 !important;
     }
-    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
         display: flex;
         justify-content: flex-end;
     }
-    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"])
-    > div:has([data-testid="stMarkdownContainer"]) {
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
+    > [data-testid="stChatMessageContent"] {
         background: #e7f1e9;
         border: 1px solid #d5e5d8;
         border-radius: 16px 16px 4px 16px;
@@ -385,8 +385,9 @@ st.markdown(
         padding: 11px 15px;
         width: fit-content;
     }
-    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatar"],
-    [data-testid="stChatMessage"] [data-testid^="chatAvatarIcon-"],
+    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarUser"],
+    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarAssistant"],
+    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarCustom"],
     [data-testid="stChatMessage"] [data-testid="stIconMaterial"],
     [data-testid="stChatMessage"] .stChatMessageAvatar {
         display: none !important;
