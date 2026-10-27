@@ -322,8 +322,8 @@ st.markdown(
         height: 1px;
     }
     [data-testid="stChatMessage"] {
-        background: #fff;
-        border: 1px solid var(--line);
+        background: #f0f3f7;
+        border: 1px solid #e1e7ee;
         border-radius: 14px;
         box-shadow: 0 3px 12px rgba(27, 49, 38, .025);
         margin-bottom: 12px;
@@ -332,6 +332,11 @@ st.markdown(
     [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
         background: #edf4ef;
         border-color: #e2ece4;
+    }
+    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatar"],
+    [data-testid="stChatMessage"] [data-testid^="chatAvatarIcon-"],
+    [data-testid="stChatMessage"] .stChatMessageAvatar {
+        display: none !important;
     }
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p {
         font-size: 14px;
