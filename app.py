@@ -363,146 +363,103 @@ st.markdown(
     }
     /* =========================================
        CHAT MESSAGE LAYOUT
+       Render user bubbles explicitly in Python instead
+       of relying on Streamlit's internal avatar DOM.
        ========================================= */
 
-    [data-testid="stChatMessage"] {
-        display: flex !important;
-        align-items: flex-start !important;
-        width: 100% !important;
+    .user-message-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        width: 100%;
         min-width: 0;
         box-sizing: border-box;
-        margin: 0 0 20px !important;
-        padding: 0 !important;
-        background: transparent !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
+        margin: 0 0 20px;
     }
 
-    [data-testid="stChatMessage"]:has(
-        [data-testid="chatAvatarIcon-user"]
-    ),
-    [data-testid="stChatMessage"]:has(
-        [data-testid="stChatMessageAvatarUser"]
-    ) {
-        justify-content: flex-end !important;
-    }
-
-    [data-testid="stChatMessage"]:has(
-        [data-testid="chatAvatarIcon-assistant"]
-    ),
-    [data-testid="stChatMessage"]:has(
-        [data-testid="stChatMessageAvatarAssistant"]
-    ) {
-        justify-content: flex-start !important;
-    }
-
-    [data-testid="stChatMessage"] [data-testid*="Avatar"],
-    [data-testid="stChatMessage"] [data-testid="chatAvatarIcon-user"],
-    [data-testid="stChatMessage"] [data-testid="chatAvatarIcon-assistant"],
-    [data-testid="stChatMessage"] [data-testid="stIconMaterial"],
-    [data-testid="stChatMessage"] .stChatMessageAvatar {
-        display: none !important;
-    }
-
-    [data-testid="stChatMessage"]:has(
-        [data-testid="chatAvatarIcon-user"]
-    ) [data-testid="stChatMessageContent"],
-    [data-testid="stChatMessage"]:has(
-        [data-testid="stChatMessageAvatarUser"]
-    ) [data-testid="stChatMessageContent"] {
-        display: block !important;
-        flex: 0 1 auto !important;
-        width: fit-content !important;
-        max-width: min(80%, 760px) !important;
+    .user-bubble {
+        display: block;
+        box-sizing: border-box;
+        width: fit-content;
+        max-width: min(80%, 760px);
         min-width: 0;
-        margin: 0 0 0 auto !important;
-        padding: 11px 16px !important;
-
-        background: #e7f1e9 !important;
-        border: 1px solid #d5e5d8 !important;
-        border-radius: 18px 18px 6px 18px !important;
-        box-shadow: 0 3px 10px rgba(27, 49, 38, 0.035) !important;
-
-        text-align: left !important;
+        margin-left: auto;
+        padding: 10px 15px;
+        background: #e7f1e9;
+        border: 1px solid #d5e5d8;
+        border-radius: 18px 18px 6px 18px;
+        box-shadow: 0 3px 10px rgba(27, 49, 38, 0.035);
+        color: #17231f;
+        font-size: 14px;
+        line-height: 1.65;
+        text-align: left;
+        white-space: pre-wrap;
         overflow-wrap: anywhere;
+        word-break: break-word;
     }
 
-    [data-testid="stChatMessage"]:has(
-        [data-testid="chatAvatarIcon-assistant"]
-    ) [data-testid="stChatMessageContent"],
-    [data-testid="stChatMessage"]:has(
-        [data-testid="stChatMessageAvatarAssistant"]
-    ) [data-testid="stChatMessageContent"] {
-        display: block !important;
-        flex: 1 1 auto !important;
-        width: 100% !important;
-        max-width: 100% !important;
+    /* Assistant messages stay unboxed and left-aligned.
+       st.container(key=...) gives them a stable CSS hook. */
+    .stApp [class*="st-key-docchat-assistant-"] {
+        width: 100%;
         min-width: 0;
-        margin: 0 !important;
-        padding: 0 !important;
-
-        background: transparent !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-
-        text-align: left !important;
-        overflow-wrap: anywhere;
+        margin: 0 0 20px;
     }
 
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] {
         min-width: 0;
         max-width: 100%;
         overflow-wrap: anywhere;
     }
 
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p {
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] p {
         font-size: 14px;
         line-height: 1.75;
         margin: 0 0 0.8rem;
     }
 
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p:last-child {
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] p:last-child {
         margin-bottom: 0;
     }
 
-    .source-label {
-        color: #78867e;
-        font-size: 11px;
-        margin-top: 8px;
-    }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h1,
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h2,
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h3 {
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h1,
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h2,
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h3 {
         color: #24352c;
         font-family: 'Manrope', sans-serif;
         font-weight: 700;
         line-height: 1.35;
         margin: 1.1rem 0 0.55rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h1 {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h1 {
         font-size: 1.35rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h2 {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h2 {
         font-size: 1.2rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h3 {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] h3 {
         font-size: 1.05rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] ul,
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] ol {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] ul,
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] ol {
         margin: 0.35rem 0 0.85rem;
         padding-left: 1.4rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] li {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] li {
         line-height: 1.65;
         padding-left: 0.15rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] li + li {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] li + li {
         margin-top: 0.25rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] blockquote {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] blockquote {
         background: rgba(255, 255, 255, 0.5);
         border-left: 3px solid #8caf98;
         border-radius: 0 7px 7px 0;
@@ -510,7 +467,8 @@ st.markdown(
         margin: 0.8rem 0;
         padding: 0.55rem 0.9rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] pre {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] pre {
         background: #202a26;
         border: 1px solid rgba(25, 45, 35, 0.12);
         border-radius: 9px;
@@ -518,18 +476,21 @@ st.markdown(
         max-width: 100%;
         overflow-x: auto;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] pre code {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] pre code {
         color: #e4eee8;
         font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
         font-size: 0.88em;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] :not(pre) > code {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] :not(pre) > code {
         background: rgba(35, 116, 90, 0.09);
         border-radius: 4px;
         color: #245c43;
         padding: 0.12rem 0.3rem;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] table {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] table {
         border-collapse: collapse;
         display: block;
         margin: 0.75rem 0;
@@ -537,18 +498,21 @@ st.markdown(
         overflow-x: auto;
         width: max-content;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] th,
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] td {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] th,
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] td {
         border: 1px solid #dce4de;
         padding: 0.5rem 0.7rem;
         text-align: left;
         vertical-align: top;
     }
-    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] th {
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] th {
         background: rgba(255, 255, 255, 0.65);
         color: #34463b;
         font-weight: 700;
     }
+
     .source-label {
         color: #78867e;
         font-size: 11px;
@@ -615,6 +579,32 @@ st.markdown(
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+
+def render_user_message(content: str) -> None:
+    """Render a user message using an explicit, stable right-aligned bubble."""
+    # Escape content so user text cannot inject HTML into the page.
+    safe_content = html.escape(content)
+    st.markdown(
+        f'<div class="user-message-row"><div class="user-bubble">{safe_content}</div></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_assistant_message(
+    content: str,
+    source: str | None = None,
+    key: str = "docchat-assistant-live-0",
+) -> None:
+    """Render assistant Markdown without a bubble, with a stable CSS scope."""
+    with st.container(key=key):
+        st.markdown(content)
+        if source:
+            source_label = "Web search" if source == "web" else "Your documents"
+            st.markdown(
+                f'<div class="source-label">Source · {source_label}</div>',
+                unsafe_allow_html=True,
+            )
 
 with st.sidebar:
     st.markdown(
@@ -766,7 +756,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if not st.session_state.messages:
+# Define the chat input before deciding whether to show the empty-state card.
+# This lets the first submitted message replace the welcome card immediately.
+prompt = st.chat_input("Ask a question about your documents...")
+
+if not st.session_state.messages and not (prompt and is_ready):
     if is_ready:
         welcome_title = "Your documents are ready."
         welcome_copy = (
@@ -809,19 +803,17 @@ if not st.session_state.messages:
     )
 else:
     st.markdown('<div class="chat-divider">Conversation</div>', unsafe_allow_html=True)
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-            if message.get("source"):
-                source_label = (
-                    "Web search" if message["source"] == "web" else "Your documents"
-                )
-                st.markdown(
-                    f'<div class="source-label">Source · {source_label}</div>',
-                    unsafe_allow_html=True,
-                )
+    for message_index, message in enumerate(st.session_state.messages):
+        if message["role"] == "user":
+            render_user_message(message["content"])
+        else:
+            render_assistant_message(
+                message["content"],
+                source=message.get("source"),
+                key=f"docchat-assistant-{message_index}",
+            )
 
-if prompt := st.chat_input("Ask a question about your documents..."):
+if prompt:
     if not is_ready:
         st.warning(
             "Add and process your documents in the workspace panel "
@@ -829,23 +821,20 @@ if prompt := st.chat_input("Ask a question about your documents..."):
         )
     else:
         st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        render_user_message(prompt)
 
-        with st.chat_message("assistant"):
-            with st.spinner("Looking through your workspace..."):
-                try:
-                    result = run_agent(prompt)
-                    answer = result["answer"]
-                    source = result["source"]
-                    st.markdown(answer)
-                    source_label = "Web search" if source == "web" else "Your documents"
-                    st.markdown(
-                        f'<div class="source-label">Source · {source_label}</div>',
-                        unsafe_allow_html=True,
-                    )
-                    st.session_state.messages.append(
-                        {"role": "assistant", "content": answer, "source": source}
-                    )
-                except Exception as error:
-                    st.error(f"Could not complete your answer: {error}")
+        with st.spinner("Looking through your workspace..."):
+            try:
+                result = run_agent(prompt)
+                answer = result["answer"]
+                source = result["source"]
+                st.session_state.messages.append(
+                    {"role": "assistant", "content": answer, "source": source}
+                )
+                render_assistant_message(
+                    answer,
+                    source=source,
+                    key=f"docchat-assistant-live-{len(st.session_state.messages)}",
+                )
+            except Exception as error:
+                st.error(f"Could not complete your answer: {error}")
