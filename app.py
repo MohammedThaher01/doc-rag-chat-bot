@@ -361,69 +361,116 @@ st.markdown(
         flex: 1;
         height: 1px;
     }
+    /* =========================================
+       CHAT MESSAGE LAYOUT
+       ========================================= */
+
     [data-testid="stChatMessage"] {
-        background: transparent !important;
-        border: 0 !important;
-        box-sizing: border-box;
-        border-radius: 0;
-        box-shadow: none !important;
-        margin-bottom: 18px;
-        padding: 0 !important;
+        display: flex !important;
+        align-items: flex-start !important;
         width: 100% !important;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
-        display: flex;
-        justify-content: flex-end;
-        width: 100%;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
-    > [data-testid="stChatMessageContent"] {
-        background: #e7f1e9;
-        border: 1px solid #d5e5d8;
-        border-radius: 18px 18px 6px 18px;
+        min-width: 0;
         box-sizing: border-box;
-        box-shadow: 0 6px 18px rgba(27, 49, 38, .05);
-        flex: 0 1 auto;
-        margin-left: auto;
-        max-width: min(80%, 760px);
-        padding: 12px 16px;
-        width: fit-content;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
-        display: flex;
-        justify-content: flex-start;
-        width: 100%;
-    }
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"])
-    > [data-testid="stChatMessageContent"] {
+        margin: 0 0 20px !important;
+        padding: 0 !important;
         background: transparent !important;
         border: 0 !important;
         border-radius: 0 !important;
         box-shadow: none !important;
-        box-sizing: border-box;
-        margin-left: 0 !important;
-        margin-right: auto;
-        max-width: 100%;
-        padding: 0 !important;
-        width: 100%;
     }
-    [data-testid="stChatMessage"] > [data-testid="stChatMessageContent"] {
-        overflow-wrap: anywhere;
+
+    [data-testid="stChatMessage"]:has(
+        [data-testid="chatAvatarIcon-user"]
+    ),
+    [data-testid="stChatMessage"]:has(
+        [data-testid="stChatMessageAvatarUser"]
+    ) {
+        justify-content: flex-end !important;
     }
-    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarUser"],
-    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarAssistant"],
-    [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarCustom"],
+
+    [data-testid="stChatMessage"]:has(
+        [data-testid="chatAvatarIcon-assistant"]
+    ),
+    [data-testid="stChatMessage"]:has(
+        [data-testid="stChatMessageAvatarAssistant"]
+    ) {
+        justify-content: flex-start !important;
+    }
+
+    [data-testid="stChatMessage"] [data-testid*="Avatar"],
+    [data-testid="stChatMessage"] [data-testid="chatAvatarIcon-user"],
+    [data-testid="stChatMessage"] [data-testid="chatAvatarIcon-assistant"],
     [data-testid="stChatMessage"] [data-testid="stIconMaterial"],
     [data-testid="stChatMessage"] .stChatMessageAvatar {
         display: none !important;
     }
+
+    [data-testid="stChatMessage"]:has(
+        [data-testid="chatAvatarIcon-user"]
+    ) [data-testid="stChatMessageContent"],
+    [data-testid="stChatMessage"]:has(
+        [data-testid="stChatMessageAvatarUser"]
+    ) [data-testid="stChatMessageContent"] {
+        display: block !important;
+        flex: 0 1 auto !important;
+        width: fit-content !important;
+        max-width: min(80%, 760px) !important;
+        min-width: 0;
+        margin: 0 0 0 auto !important;
+        padding: 11px 16px !important;
+
+        background: #e7f1e9 !important;
+        border: 1px solid #d5e5d8 !important;
+        border-radius: 18px 18px 6px 18px !important;
+        box-shadow: 0 3px 10px rgba(27, 49, 38, 0.035) !important;
+
+        text-align: left !important;
+        overflow-wrap: anywhere;
+    }
+
+    [data-testid="stChatMessage"]:has(
+        [data-testid="chatAvatarIcon-assistant"]
+    ) [data-testid="stChatMessageContent"],
+    [data-testid="stChatMessage"]:has(
+        [data-testid="stChatMessageAvatarAssistant"]
+    ) [data-testid="stChatMessageContent"] {
+        display: block !important;
+        flex: 1 1 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+
+        text-align: left !important;
+        overflow-wrap: anywhere;
+    }
+
+    [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p {
         font-size: 14px;
-        line-height: 1.7;
+        line-height: 1.75;
         margin: 0 0 0.8rem;
     }
+
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] p:last-child {
         margin-bottom: 0;
+    }
+
+    .source-label {
+        color: #78867e;
+        font-size: 11px;
+        margin-top: 8px;
     }
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h1,
     [data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] h2,
