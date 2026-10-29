@@ -374,18 +374,41 @@ st.markdown(
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
         display: flex;
         justify-content: flex-end;
+        width: 100%;
     }
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"])
     > [data-testid="stChatMessageContent"] {
         background: #e7f1e9;
         border: 1px solid #d5e5d8;
-        border-radius: 16px 16px 4px 16px;
+        border-radius: 18px 18px 6px 18px;
         box-sizing: border-box;
+        box-shadow: 0 6px 18px rgba(27, 49, 38, .05);
         flex: 0 1 auto;
         margin-left: auto;
         max-width: min(80%, 760px);
-        padding: 11px 15px;
+        padding: 12px 16px;
         width: fit-content;
+    }
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"])
+    > [data-testid="stChatMessageContent"] {
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        box-sizing: border-box;
+        margin-left: 0 !important;
+        margin-right: auto;
+        max-width: 100%;
+        padding: 0 !important;
+        width: 100%;
+    }
+    [data-testid="stChatMessage"] > [data-testid="stChatMessageContent"] {
+        overflow-wrap: anywhere;
     }
     [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarUser"],
     [data-testid="stChatMessage"] [data-testid="stChatMessageAvatarAssistant"],
