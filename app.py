@@ -1,5 +1,6 @@
 import html
 import os
+import re
 import tempfile
 
 import streamlit as st
@@ -492,19 +493,27 @@ st.markdown(
 
     .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] table {
         border-collapse: collapse;
-        display: block;
+        table-layout: auto;
         margin: 0.75rem 0;
         max-width: 100%;
-        overflow-x: auto;
-        width: max-content;
+        width: 100%;
     }
 
     .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] th,
     .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] td {
         border: 1px solid #dce4de;
-        padding: 0.5rem 0.7rem;
+        padding: 0.65rem 0.8rem;
         text-align: left;
         vertical-align: top;
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] th:first-child,
+    .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] td:first-child {
+        min-width: 145px;
+        overflow-wrap: normal;
+        word-break: normal;
     }
 
     .stApp [class*="st-key-docchat-assistant-"] [data-testid="stMarkdownContainer"] th {
@@ -581,9 +590,25 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
+def normalize_assistant_markdown(content: str) -> str:
+    """Normalize common LLM formatting mistakes before Markdown rendering.
+
+    Only <br> tags are allowed through to the Markdown renderer, so a model
+    response cannot inject arbitrary HTML. Currency dollar signs are escaped
+    to prevent Markdown/LaTeX from interpreting amounts as math delimiters.
+    """
+    content = content.replace("\r\n", "\n").replace("\r", "\n")
+    content = re.sub(r"<br\s*/?>", "<br>", content, flags=re.IGNORECASE)
+    content = re.sub(r"</br\s*>", "", content, flags=re.IGNORECASE)
+    # Strip all other HTML tags but preserve Markdown and the safe <br> tag.
+    content = re.sub(r"</?(?!br>)[a-zA-Z][^>]*>", "", content)
+    # Currency values such as $2,400 should not be parsed as LaTeX math.
+    content = re.sub(r"(?<!\\)\$(?=\s*\d)", r"\\$", content)
+    return content
+
+
 def render_user_message(content: str) -> None:
     """Render a user message using an explicit, stable right-aligned bubble."""
-    # Escape content so user text cannot inject HTML into the page.
     safe_content = html.escape(content)
     st.markdown(
         f'<div class="user-message-row"><div class="user-bubble">{safe_content}</div></div>',
@@ -597,8 +622,11 @@ def render_assistant_message(
     key: str = "docchat-assistant-live-0",
 ) -> None:
     """Render assistant Markdown without a bubble, with a stable CSS scope."""
+    content = normalize_assistant_markdown(content)
     with st.container(key=key):
-        st.markdown(content)
+        # HTML is sanitized above; allowing only <br> lets line breaks in table
+        # cells render correctly while retaining normal Markdown formatting.
+        st.markdown(content, unsafe_allow_html=True)
         if source:
             source_label = "Web search" if source == "web" else "Your documents"
             st.markdown(
@@ -820,12 +848,19 @@ if prompt:
             "before asking a question."
         )
     else:
+        # Capture history before appending the current prompt, otherwise the
+        # latest question appears twice and can confuse follow-up resolution.
+        recent_messages = st.session_state.messages[-6:]
+        chat_history = "\n".join(
+            f"{'User' if item['role'] == 'user' else 'DocChat'}: {item['content'][:1800]}"
+            for item in recent_messages
+        )
         st.session_state.messages.append({"role": "user", "content": prompt})
         render_user_message(prompt)
 
         with st.spinner("Looking through your workspace..."):
             try:
-                result = run_agent(prompt)
+                result = run_agent(prompt, chat_history=chat_history)
                 answer = result["answer"]
                 source = result["source"]
                 st.session_state.messages.append(
