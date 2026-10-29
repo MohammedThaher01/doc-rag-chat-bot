@@ -1,13 +1,13 @@
 import os
 import re
-from typing import TypedDict
+from typing import Any, TypedDict
 
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langgraph.graph import END, StateGraph
 
-from tools import rag_search, web_search
+from tools import search_documents, web_search
 
 load_dotenv()
 
@@ -19,6 +19,7 @@ class AgentState(TypedDict):
     web_context: str
     final_answer: str
     source: str
+    vectorstore: Any
 
 
 def get_llm():
@@ -46,20 +47,33 @@ def _is_follow_up(question: str) -> bool:
     return any(re.search(pattern, text) for pattern in patterns)
 
 
+def _previous_user_turns(history: str) -> list[str]:
+    """Extract user turns only; never feed previous assistant guesses to retrieval."""
+    turns = re.findall(r"(?m)^User:\s*(.*)$", history or "")
+    return [turn.strip() for turn in turns if turn.strip()]
+
+
 def retrieve_node(state: AgentState) -> AgentState:
     question = state["question"]
     history = state.get("chat_history", "").strip()
-
-    # Keep standalone queries focused. For follow-ups such as "tell me about it",
-    # include recent turns so retrieval can resolve what "it" refers to.
     retrieval_query = question
-    if history and _is_follow_up(question):
-        retrieval_query = (
-            f"Recent conversation:\n{history[-4500:]}\n\n"
-            f"Current follow-up: {question}"
-        )
 
-    state["rag_context"] = rag_search.run(retrieval_query)
+    # Resolve short follow-ups using prior user questions, not prior assistant
+    # answers. Including an earlier incomplete answer in the search query can
+    # reinforce the very omission the user is asking DocChat to correct.
+    if history and _is_follow_up(question):
+        prior_user_turns = _previous_user_turns(history)[-2:]
+        if prior_user_turns:
+            retrieval_query = (
+                "Related earlier user questions:\n"
+                + "\n".join(prior_user_turns)
+                + f"\nCurrent question: {question}"
+            )
+
+    state["rag_context"] = search_documents(
+        retrieval_query,
+        vectorstore=state.get("vectorstore"),
+    )
     return state
 
 
@@ -96,6 +110,8 @@ Conversation so far:
 Answer the latest question using the relevant information from {source_note}.
 Follow these response rules:
 - Continue the existing conversation when history is present. Resolve follow-up references such as "it", "that", or "the second point" using the conversation.
+- Use conversation history only to understand what the user refers to. Do not treat earlier assistant responses as evidence; the currently retrieved document excerpts take precedence if they conflict.
+- For questions asking for all projects, awards, skills, or sections, enumerate every relevant item supported by the retrieved excerpts. Keep project entries separate from hackathons/recognitions unless the document labels them as projects.
 - Answer the question directly. Do not start with "Hey there", "Hi", "Hello", or another greeting unless the user is greeting you for the first time.
 - Do not reintroduce yourself or repeat generic opening phrases on each turn.
 - Use clean Markdown: headings, bullets, numbered lists, and tables only when they improve readability.
@@ -155,7 +171,7 @@ def get_agent():
     return _agent
 
 
-def run_agent(question: str, chat_history: str = "") -> dict:
+def run_agent(question: str, chat_history: str = "", vectorstore: Any | None = None) -> dict:
     """Run DocChat. chat_history remains optional for backwards compatibility."""
     result = get_agent().invoke(
         {
@@ -165,6 +181,7 @@ def run_agent(question: str, chat_history: str = "") -> dict:
             "web_context": "",
             "final_answer": "",
             "source": "rag",
+            "vectorstore": vectorstore,
         }
     )
     return {"answer": result["final_answer"], "source": result["source"]}

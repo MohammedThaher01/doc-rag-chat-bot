@@ -51,8 +51,8 @@ def load_documents(file_paths: list[str]):
 def build_vectorstore(file_paths: list[str]):
     docs = load_documents(file_paths)
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=50,
+        chunk_size=850,
+        chunk_overlap=100,
         separators=["\n\n", "\n", ".", " "]
     )
     chunks = splitter.split_documents(docs)

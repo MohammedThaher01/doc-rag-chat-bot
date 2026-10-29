@@ -860,7 +860,11 @@ if prompt:
 
         with st.spinner("Looking through your workspace..."):
             try:
-                result = run_agent(prompt, chat_history=chat_history)
+                result = run_agent(
+                    prompt,
+                    chat_history=chat_history,
+                    vectorstore=st.session_state.vectorstore,
+                )
                 answer = result["answer"]
                 source = result["source"]
                 st.session_state.messages.append(
