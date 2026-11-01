@@ -1,165 +1,167 @@
 
-# 📄 DocChat — Document RAG Chatbot with LangGraph Agent
+# DocChat
 
-An end-to-end AI-powered document assistant that lets you upload PDFs, TXTs, or DOCXs and chat with them using a LangGraph autonomous agent backed by Groq's ultra-fast LPU inference.
+DocChat is a document-aware chat application designed for PDF, TXT, and DOCX files. It combines a Streamlit interface, a LangGraph agent, vector retrieval, and Groq-hosted language model inference to help users ask grounded questions about uploaded documents.
 
-🔗 **Live Demo:** [dog-rag-chatbot.streamlit.app](https://dog-rag-chatbot-v2ofgfbtpgppjkxpppmbee.streamlit.app/)
+A live deployment is available here: [dog-rag-chatbot.streamlit.app](https://dog-rag-chatbot-v2ofgfbtpgppjkxpppmbee.streamlit.app/)
 
----
+## Overview
 
-## 🧠 How It Works
+DocChat is built for document Q&A workflows where answers should remain grounded in the uploaded material. The system performs the following steps:
 
-This app uses a **RAG-first autonomous agent** built with LangGraph:
+1. Extract text from the uploaded files.
+2. Split the document into overlapping chunks.
+3. Generate embeddings and build a local FAISS index.
+4. Classify the incoming question to determine the retrieval strategy.
+5. Retrieve relevant passages from the active workspace index.
+6. Use a LangGraph agent to answer the question with conversation context and source awareness.
+7. Fall back to web search only when the uploaded context is insufficient.
 
+## Key capabilities
 
-```
-User Question
-      ↓
-[Retrieve Node] → FAISS similarity search on uploaded docs
-      ↓
-[Relevance Check] → Is the context useful?
-      ↓                        ↓
-[Generate Answer]         [Web Search Node] → DuckDuckGo
-      ↓                        ↓
-              [Generate Answer]
-                      ↓
-              Streamed response + Source label
-```
+- Chat with multiple document types: PDF, TXT, and DOCX
+- Conversational memory for follow-up questions
+- Workspace-aware retrieval using the active FAISS index
+- Multi-query retrieval for broad questions and project summaries
+- Full-document retrieval for smaller collections to avoid missing important sections
+- Deduplication of overlapping chunks before passing context to the model
+- Source attribution between document-based answers and web fallback answers
+- Markdown-safe response formatting with cleaner rendering in the UI
 
-
-1. Every question first hits the **FAISS vector store** built from your uploaded documents
-2. If the retrieved context is insufficient, the agent **falls back to web search** automatically
-3. The LLM generates a response and the UI shows whether the answer came from your **documents or the web**
-
----
-
-## 🏗️ Architecture
+## Architecture
 
 | Layer | Technology |
 |---|---|
-| UI | Streamlit |
-| Agent Orchestration | LangGraph |
-| LLM Inference | Groq API (GPT-OSS 20B) |
-| Vector Store | FAISS (local) |
-| Embeddings | HuggingFace `all-MiniLM-L6-v2` |
-| Web Search | DuckDuckGo (via `ddgs`) |
-| OCR Fallback | Tesseract + pdf2image |
-| Document Loaders | LangChain (PDF, TXT, DOCX) |
+| User interface | Streamlit |
+| Agent orchestration | LangGraph |
+| LLM inference | Groq API with GPT-OSS 20B |
+| Vector store | FAISS |
+| Embedding model | HuggingFace all-MiniLM-L6-v2 |
+| Web search fallback | DuckDuckGo |
+| OCR support | Tesseract and pdf2image |
+| Document loaders | LangChain |
 
----
+## Retrieval design
 
-## ✨ Features
+The retrieval layer was improved to better support resume, portfolio, and document-summary questions.
 
-- Upload and chat with PDF, TXT, DOCX files
-- LangGraph autonomous agent — RAG-first, web search fallback
-- FAISS vector store with recursive chunking and persistent indexing
-- OCR fallback for scanned/image-based PDFs using Tesseract
-- Web search when document context is insufficient
-- Conversational UI with source attribution (Document vs Web)
-- Groq LPU inference — sub-second response times
+### Question classification
 
----
+Incoming prompts are classified into one of three groups:
 
-## 🚀 Run Locally
+- Overview: broad questions about the whole document, such as summary or general overview
+- Projects: questions about portfolio items, projects, recognitions, or achievements
+- Specific: direct factual questions that target one detail or section
 
-### 1. Clone the repo
+### Retrieval strategy
+
+- Overview and project questions expand the query into multiple complementary search terms.
+- Smaller indexes can retrieve all chunks instead of only the top similarity matches.
+- Larger collections use multi-query semantic search with deduplication.
+- Results are capped to keep the final prompt manageable.
+- Previous user turns are used to resolve follow-up references, while earlier assistant responses are not treated as evidence.
+
+This makes the system more reliable for conversational document exploration compared with a simple top-two-chunk retrieval approach.
+
+## Document processing
+
+The ingestion pipeline uses recursive chunking to preserve context while keeping the chunk size practical for retrieval.
+
+- Chunk size: 850 characters
+- Chunk overlap: 100 characters
+- Embedding model: all-MiniLM-L6-v2
+- Vector database: FAISS
+
+Larger chunks preserve surrounding context, while overlap helps prevent losing information at boundaries between sections.
+
+## Project structure
+
+```text
+doc-rag-chatbot/
+├── app.py              # Streamlit UI and chat rendering
+├── agent.py            # LangGraph agent and conversational logic
+├── tools.py            # Retrieval, web fallback, and query expansion
+├── rag_pipeline.py     # Document loading, chunking, and FAISS index creation
+├── requirements.txt    # Python runtime dependencies
+├── packages.txt        # System packages for deployment environments
+├── .env                # Local environment variables such as GROQ_API_KEY
+├── faiss_index/        # Generated FAISS index files
+├── evaluate.py         # Evaluation utilities
+├── test_agent.py       # Agent-related tests
+├── README.md           # Project documentation
+└── .gitignore          # Excludes local secrets and generated artifacts
+```
+
+## Local setup
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/MohammedThaher01/doc-rag-chatbot.git
 cd doc-rag-chatbot
 ```
 
-### 2. Create and activate conda environment
+### 2. Create and activate a Python environment
+
 ```bash
 conda create -n aienv python=3.11
 conda activate aienv
 ```
 
-### 3. Install system dependencies (Mac)
+### 3. Install system dependencies
+
+For macOS:
+
 ```bash
 brew install tesseract poppler
 ```
 
 ### 4. Install Python dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Set up environment variables
+### 5. Configure environment variables
+
 Create a `.env` file in the project root:
-```
+
+```env
 GROQ_API_KEY=your_groq_api_key_here
 ```
-Get your free key at [console.groq.com](https://console.groq.com) — no credit card needed.
 
 ### 6. Run the app
+
 ```bash
 streamlit run app.py
 ```
 
----
+## Deployment
 
-## 📁 Project Structure
+To deploy on Streamlit Cloud:
 
-```
-doc-rag-chatbot/
-├── app.py              # Streamlit UI
-├── rag_pipeline.py     # Document ingestion, FAISS vectorstore, embedding
-├── agent.py            # LangGraph agent graph definition
-├── tools.py            # RAG search and web search tool definitions
-├── requirements.txt    # Python dependencies
-├── packages.txt        # System dependencies for Streamlit Cloud
-├── .env                # API keys (never commit this)
-└── faiss_index/        # Auto-created vector index (never commit this)
-```
+1. Push the project to GitHub.
+2. Create a new app in Streamlit Cloud.
+3. Select the repository and branch.
+4. Set the main file to `app.py`.
+5. Add the following secret under app settings:
 
----
-
-## 🔧 Tech Stack
-
-```
-Python 3.11
-LangChain + LangGraph
-FAISS (CPU)
-HuggingFace Sentence Transformers
-Groq API
-DuckDuckGo Search
-Tesseract OCR
-Streamlit
-```
-
----
-
-## 🌐 Deploy on Streamlit Cloud
-
-1. Push repo to GitHub (ensure `faiss_index/` and `.env` are in `.gitignore`)
-2. Go to [share.streamlit.io](https://share.streamlit.io) → New app
-3. Select your repo, branch, and `app.py`
-4. Under **Secrets**, add:
-```
+```env
 GROQ_API_KEY = "your_key_here"
 ```
-5. Deploy — `packages.txt` handles system deps automatically
 
----
+The project includes `packages.txt` for environment-level dependencies required during deployment.
 
-## 📌 Key Design Decisions
+## Notes
 
-**Why FAISS over Pinecone/Chroma?**
-Runs in-process with zero infrastructure. No API keys, no database to manage. Trade-off: no metadata filtering, but sufficient for document Q&A.
+- The application uses the active workspace vector store instead of a stale saved index whenever one is available.
+- The agent keeps a short conversation history to resolve follow-up references such as "it" or "tell me more".
+- If the retrieved document context is insufficient, the agent can consult DuckDuckGo before responding.
+- The answer layer formats content as clean Markdown and avoids HTML output in the final answer.
 
-**Why RAG-first agent?**
-Keeps answers grounded in your documents by default. Web search only activates when the document context scores below the relevance threshold — prevents hallucination while maintaining utility for off-topic questions.
+## Author
 
-**Why Groq?**
-LPU hardware delivers 500-1000 tokens/second — 5-10x faster than GPU inference. Entire stack is free for prototyping.
+Mohammed Thaher S
 
-**Why `all-MiniLM-L6-v2`?**
-Lightweight (~80MB), runs locally, strong semantic similarity performance. No API calls for embeddings.
-
----
-
-## 🙋 Author
-
-By **Mohammed Thaher S**
-
-[LinkedIn](https://www.linkedin.com/in/mohammed-thaher-s/) • [GitHub](https://github.com/MohammedThaher01)
+- [LinkedIn](https://www.linkedin.com/in/mohammed-thaher-s/)
+- [GitHub](https://github.com/MohammedThaher01)
