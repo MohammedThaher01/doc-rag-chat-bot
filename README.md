@@ -5,6 +5,16 @@ DocChat is a document-aware chat application designed for PDF, TXT, and DOCX fil
 
 A live deployment is available here: [dog-rag-chatbot.streamlit.app](https://dog-rag-chatbot-v2ofgfbtpgppjkxpppmbee.streamlit.app/)
 
+## Features
+
+- Chat with PDF, TXT, and DOCX files
+- LangGraph autonomous agent with RAG-first, web search fallback
+- Question classification — overview, project, and specific retrieval strategies
+- Multi-query retrieval with chunk deduplication
+- OCR fallback for scanned and image-based PDFs
+- Source attribution on every response
+- Groq LPU inference for sub-second responses
+  
 ## Overview
 
 DocChat is built for document Q&A workflows where answers should remain grounded in the uploaded material. The system performs the following steps:
@@ -17,6 +27,23 @@ DocChat is built for document Q&A workflows where answers should remain grounded
 6. Use a LangGraph agent to answer the question with conversation context and source awareness.
 7. Fall back to web search only when the uploaded context is insufficient.
 
+## Agent Flow
+
+```
+User Question
+      ↓
+[Question Classifier] → overview / project / specific
+      ↓
+[Retrieve Node] → FAISS similarity search (multi-query for broad questions)
+      ↓
+[Relevance Check] → Is the context sufficient?
+      ↓                        ↓
+[Generate Answer]     [Web Search Node] → DuckDuckGo
+      ↓                        ↓
+              [Generate Answer]
+                      ↓
+         Response + Source label (Document / Web)
+```
 ## Key capabilities
 
 - Chat with multiple document types: PDF, TXT, and DOCX
