@@ -9,7 +9,7 @@ A live deployment is available here: [dog-rag-chatbot.streamlit.app](https://dog
 
 - Chat with PDF, TXT, and DOCX files
 - LangGraph autonomous agent with RAG-first, web search fallback
-- Question classification — overview, project, and specific retrieval strategies
+- Question classification: overview, project, and specific retrieval strategies
 - Multi-query retrieval with chunk deduplication
 - OCR fallback for scanned and image-based PDFs
 - Source attribution on every response
