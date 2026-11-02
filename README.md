@@ -3,7 +3,7 @@
 
 DocChat is a document-aware chat application designed for PDF, TXT, and DOCX files. It combines a Streamlit interface, a LangGraph agent, vector retrieval, and Groq-hosted language model inference to help users ask grounded questions about uploaded documents.
 
-A live deployment is available here: [dog-rag-chatbot.streamlit.app](https://dog-rag-chat-bot-v2ofgfbtpgppjkxpppmbee.streamlit.app/)
+A live deployment is available here: [dog-rag-chat-bot.streamlit.app](https://dog-rag-chat-bot-v2ofgfbtpgppjkxpppmbee.streamlit.app/)
 
 ## Features
 
