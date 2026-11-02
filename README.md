@@ -113,8 +113,6 @@ doc-rag-chatbot/
 ├── packages.txt        # System packages for deployment environments
 ├── .env                # Local environment variables such as GROQ_API_KEY
 ├── faiss_index/        # Generated FAISS index files
-├── evaluate.py         # Evaluation utilities
-├── test_agent.py       # Agent-related tests
 ├── README.md           # Project documentation
 └── .gitignore          # Excludes local secrets and generated artifacts
 ```
