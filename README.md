@@ -122,7 +122,7 @@ doc-rag-chatbot/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/MohammedThaher01/doc-rag-chatbot.git
+git clone https://github.com/MohammedThaher01/doc-rag-chat-bot.git
 cd doc-rag-chatbot
 ```
 
